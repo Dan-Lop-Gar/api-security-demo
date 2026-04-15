@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: resource-server
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: resource-server
+  template:
+    metadata:
+      labels:
+        app: resource-server
+    spec:
+      containers:
+        - name: resource-server
+          image: danst21/resource-server:2.0
+          ports:
+            - containerPort: 8081
+          envFrom:
+            - configMapRef:
+                name: resource-server-config
+            - secretRef:
+                name: resource-server-secrets   # variables sensibles
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"

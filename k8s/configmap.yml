@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: resource-server-config
+  namespace: default
+data:
+  # keycloak es el nombre del Service dentro del cluster
+  ISSUER_URI: "http://keycloak:8080/realms/mi-empresa"
+  SERVER_PORT: "8081"
+  SPRING_APPLICATION_NAME: "resource-server"

@@ -1,0 +1,22 @@
+server:
+  port: 8081
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          #Local
+          #issuer-uri: http://localhost:8080/realms/mi-empresa
+          #Manual image
+          #issuer-uri: http://host.docker.internal:8080/realms/mi-empresa
+          #Compose
+          #issuer-uri: http://keycloak:8080/realms/mi-empresa
+          issuer-uri: ${ISSUER_URI:http://localhost:8180/realms/mi-empresa}
+          # Apunta al Authorization Server — Spring descarga las llaves públicas automáticamente
+          #issuer-uri: http://localhost:8080
+logging:
+  level:
+    org:
+      springframework:
+        security: TRACE
