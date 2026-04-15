@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]        # cualquier rama
+  pull_request:
+    branches: [main]        # PRs hacia main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Paso 1 — descarga el código del repositorio
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      # Paso 2 — instala Java 21
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'   # versión de Eclipse Temurin
+
+      # Paso 3 — caché de dependencias Maven
+      # evita descargar todo en cada ejecución
+      - name: Cache Maven
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      # Paso 4 — corre los tests
+      - name: Correr tests
+        run: ./mvnw test
+
+      # Paso 5 — publica reporte de tests (opcional pero útil)
+      - name: Publicar reporte de tests
+        uses: actions/upload-artifact@v4
+        if: always()    # corre aunque los tests fallen
+        with:
+          name: test-reports
+          path: target/surefire-reports/
