@@ -3,22 +3,25 @@ package com.example.resourceserver.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration;
+import org.springframework.boot.security.oauth2.server.resource.autoconfigure.servlet.OAuth2ResourceServerAutoConfiguration;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(DemoController.class)
+@ImportAutoConfiguration(exclude = {
+        SecurityAutoConfiguration.class,
+        OAuth2ResourceServerAutoConfiguration.class
+})
 class DemoControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
-    // ========== ENDPOINTS PÚBLICOS ==========
 
     @Test
     void publicHello_DeberiaRetornarMensajePublico() throws Exception {
