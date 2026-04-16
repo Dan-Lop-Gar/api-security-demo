@@ -1,5 +1,8 @@
 name: CD — Tests + Build + Push
 
+permissions:
+  contents: write  # Necesario para push con GITHUB_TOKEN
+
 on:
   push:
     branches: [main]
@@ -81,19 +84,13 @@ jobs:
 
   update-k8s-manifests:
     needs: build-and-push
-    # Triple protección contra loop
-    if: |
-      github.event_name == 'push' && 
-      github.ref == 'refs/heads/main' && 
-      github.actor != 'github-actions[bot]' &&
-      !contains(github.event.head_commit.message, 'Update image to')
-
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.G_TOKEN }}  # token automático de GitHub
+          token: ${{ secrets.GITHUB_TOKEN }}  # ← Token del bot
 
       # Actualiza el tag de la imagen en deployment.yml
       - name: Actualizar imagen en deployment.yml
@@ -107,8 +104,8 @@ jobs:
       # Commit y push del deployment.yml actualizado
       - name: Commit y Push manifiestos actualizados
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add k8s/deployment.yml
           git commit -m "Update image to ${{ github.sha }}"
           git push
