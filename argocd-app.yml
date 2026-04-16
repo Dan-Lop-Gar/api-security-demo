@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: resource-server-app-by-argocd
+  namespace: argocd           # la Application vive en el namespace de ArgoCD
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/Dan-Lop-Gar/api-security-demo
+    targetRevision: HEAD      # rama o commit a monitorear
+    path: k8s                 # carpeta con los manifiestos
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mi-empresa     # donde se despliegan los recursos
+
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true  # crea el namespace si no existe
+    automated:
+      selfHeal: true    # si alguien cambia algo en el cluster manualmente,
+      # ArgoCD lo revierte para que coincida con Git
+      prune: true       # si eliminas un archivo de k8s/, ArgoCD elimina
+      # el recurso del cluster también

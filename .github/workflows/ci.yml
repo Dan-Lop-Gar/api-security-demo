@@ -1,8 +1,8 @@
 name: CI
 
 on:
-  push:
-    branches: [main]        # cualquier rama
+#  push:
+#    branches: [main]        # cualquier rama
   pull_request:
     branches: [main]        # PRs hacia main
 
