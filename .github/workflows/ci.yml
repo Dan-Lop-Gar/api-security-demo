@@ -7,7 +7,7 @@ on:
     branches: [main]        # PRs hacia main
 
 jobs:
-  test:
+  BuildAndTest:
     runs-on: ubuntu-latest
 
     steps:
