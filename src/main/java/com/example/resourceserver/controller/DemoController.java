@@ -31,6 +31,11 @@ public class DemoController {
         return "Este endpoint es público y para upgrade";
     }
 
+    @GetMapping("/public/apiVersion")
+    public ResponseEntity<String> publicAPIVersion() {
+        return ResponseEntity.ok("Latest version");
+    }
+
     //@PreAuthorize("hasRole('SUPERADMIN')")
     @GetMapping("/api/hello")
     public String protectedEndpoint(@AuthenticationPrincipal Jwt jwt) {

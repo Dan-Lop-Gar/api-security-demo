@@ -76,6 +76,33 @@ jobs:
             ${{ secrets.DOCKER_USERNAME }}/resource-server:latest
             ${{ secrets.DOCKER_USERNAME }}/resource-server:${{ github.sha }}
 
+  update-k8s-manifests:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.G_TOKEN }}  # token automático de GitHub
+
+      # Actualiza el tag de la imagen en deployment.yml
+      - name: Actualizar imagen en deployment.yml
+        run: |
+          sed -i "s|image: ${{ secrets.DOCKER_USERNAME }}/resource-server:.*|image: ${{ secrets.DOCKER_USERNAME }}/resource-server:${{ github.sha }}|g" k8s/deployment.yml
+
+      # Verifica el cambio
+      - name: Verifica cambio
+        run: grep "image:" k8s/deployment.yml
+
+      # Commit y push del deployment.yml actualizado
+      - name: Commit y Push manifiestos actualizados
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add k8s/deployment.yml
+          git commit -m "Update image to ${{ github.sha }}"
+          git push
+      # ArgoCD detecta este push y aplica el cambio automáticamente
+
   # JOB 3 — Deploy a Kubernetes
 #  deploy:
 #    runs-on: ubuntu-latest
