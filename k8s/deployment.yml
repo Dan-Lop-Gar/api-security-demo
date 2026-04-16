@@ -21,8 +21,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: resource-server-config
-            - secretRef:
-                name: resource-server-secrets   # variables sensibles
+#            - secretRef:
+#                name: resource-server-secrets   # variables sensibles
           resources:
             requests:
               memory: "256Mi"
