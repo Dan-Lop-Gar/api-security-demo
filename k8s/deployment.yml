@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: resource-server
-          image: danst21/resource-server:5d6280fed40f7f4bfce707490a9991e7223b2ae9
+          image: danst21/resource-server:88e550f6af193b38c6019f9ebb52afc1688cce9a
           ports:
             - containerPort: 8081
           envFrom:
