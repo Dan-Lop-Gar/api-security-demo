@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: resource-server
-  namespace: default
+  namespace: mi-empresa
 spec:
   replicas: 2
   selector:
