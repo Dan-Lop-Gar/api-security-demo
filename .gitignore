@@ -40,3 +40,4 @@ k8s/secret.yml
 k8sExercises
 dockerExercises
 docker-compose.yml
+workflowsExercises
